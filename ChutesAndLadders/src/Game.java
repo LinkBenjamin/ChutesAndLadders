@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -8,6 +9,8 @@ import java.util.Scanner;
  *
  */
 public class Game {
+	private final static int WINNING_SQUARE = 100;
+	
     public static void main(String[] args) {
         Scanner console = new Scanner(System.in);
         boolean gameContinues = true;
@@ -28,26 +31,35 @@ public class Game {
      */
     private static void playGame(Scanner console) {
         // TODO Play the game Chutes & Ladders.
+    	boolean weHaveAWinner = false;
+    	Spinner spinner = new Spinner();
+    	
+    	Player winner = new Player();
         
+    	winner.setName("Nobody");
         // Acquire player information
         List<Player> players = getPlayerInfo(console);
         
-        // Set up the board
+        do{
         
-        // do
+	        for(Player player: players){
+	            // take a turn
+	        	spinner.spin();
+	        	player.move(spinner.getCurrentValue());
+	            
+	            // evaluate whether this player won
+	        	if(player.getCurrentSquareNumber() == WINNING_SQUARE){
+		            // if so, set weHaveAWinner, the winner object, and break
+	        		weHaveAWinner = true;
+	            	winner = player;
+	            	break;
+	            }
+	        }
+	    
+        } while (!weHaveAWinner);
         
-        for(Player player: players){
-            // take a turn
-            
-            // evaluate whether this player won
-            // if so, set weHaveAWinner and break
-            // if not, next player
-        }
-        
-        
-        // while not weHaveAWinner
-        
-        // announce winner and congratulate them        
+        // announce winner and congratulate them
+      	congratulate(winner);
     }
 
     /**
@@ -58,8 +70,19 @@ public class Game {
      * @return a List of Players who are going to play this round.
      */
     private static List<Player> getPlayerInfo(Scanner console) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<Player> response = new ArrayList<Player>();
+    	int playerCount = 0;
+    	
+    	do{
+    		Player newPlayer = new Player();
+    		
+    		newPlayer.setName(askUserString("Enter player " + ++playerCount + "'s name: ", console));
+    		
+    		response.add(newPlayer);
+    		
+    	} while (askUserBoolean("Add another player? (y/n):", console));
+    	
+    	return response;
     }
 
     /**
@@ -99,5 +122,27 @@ public class Game {
          } while(!valid);
             
         return response;
+    }
+
+    /**
+     * Ask the user a question.  Get a String response
+     * 
+     * @param prompt  What are you asking?
+     * @param console The input object
+     * @return a String.
+     */
+    private static String askUserString(String prompt, Scanner console) {
+        
+        System.out.print(prompt);
+        
+        return console.next();
+    }
+    /**
+     * congratulate is the method that prints out the person who won.
+     * 
+     * @param winner Who won the game.
+     */
+    private static void congratulate(Player winner){
+    	System.out.print("Winner, winner, chicken dinner! " + winner.getName() + " has won the game.");
     }
 }
