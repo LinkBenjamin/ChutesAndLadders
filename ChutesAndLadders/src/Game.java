@@ -10,6 +10,7 @@ import java.util.Scanner;
  */
 public class Game {
 	private final static int WINNING_SQUARE = 100;
+	private final static int SPINNER_MAX = 6;
 	
     public static void main(String[] args) {
         Scanner console = new Scanner(System.in);
@@ -32,7 +33,7 @@ public class Game {
     private static void playGame(Scanner console) {
         // TODO Play the game Chutes & Ladders.
     	boolean weHaveAWinner = false;
-    	Spinner spinner = new Spinner();
+    	Spinner spinner = new Spinner(SPINNER_MAX);
     	
     	Player winner = new Player();
         
